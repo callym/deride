@@ -1,6 +1,6 @@
 #[derive(deride::Without)]
 #[without(name = WithoutExampleTwo, derive = Clone, derive = Debug)]
-struct WithoutExample {
+pub(crate) struct WithoutExample {
   field_a: Option<i32>,
   field_b: String,
   #[without]

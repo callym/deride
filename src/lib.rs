@@ -18,8 +18,6 @@ pub fn derive_answer_fn(input: TokenStream) -> TokenStream {
     },
   };
 
-  let original_struc_name = input.ident;
-
   let without_attr: Attribute = parse_quote!(#[without]);
 
   let mut name: Option<Path> = None;
@@ -67,15 +65,18 @@ pub fn derive_answer_fn(input: TokenStream) -> TokenStream {
     quote! { #[derive(#(#derives),*)]}
   };
 
+  let vis = input.vis.clone();
+  let original_name = input.ident.clone();
+
   let expanded = quote! {
     #derives
-    struct #name {
+    #vis struct #name {
       #(#new_fields),*
     }
 
-    impl From<#original_struc_name> for #name {
-      fn from(value: #original_struc_name) -> #name {
-        let #original_struc_name { #(#new_field_names),*, .. } = value;
+    impl From<#original_name> for #name {
+      fn from(value: #original_name) -> #name {
+        let #original_name { #(#new_field_names),*, .. } = value;
 
         #name {
           #(#new_field_names),*
